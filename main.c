@@ -7,7 +7,8 @@ void show_score(uchar (*music)[2]);
 void delay(uchar p);
 uchar m,n; 
 
-
+char dot_h=0x2e;
+char dot_l=0x07;
 uchar start=1;
 uchar port_status;
 uchar key,k=0;
@@ -20,10 +21,10 @@ void main()
 	P4M1=0x00;
 	P4M0=0x00;
 	Ini_Lcd();//液晶初始化子程序
-	Disp(1,0,14,"欢迎使用无弦琴");//显示数据到LCD12864子程序			
+	Disp(1,0,16,"****************");//显示数据到LCD12864子程序			
 	Disp(2,0,14,"欢迎使用无弦琴");//显示数据到LCD12864子程序
-	Disp(3,0,14,"欢迎使用无弦琴");//显示数据到LCD12864子程序
-	Disp(4,0,12,"浙大光电学院");//显示数据到LCD12864子程序
+	Disp(3,0,12,"浙大光电学院");//显示数据到LCD12864子程序
+	Disp(4,0,16,"****************");//显示数据到LCD12864子程序
 	play_start(music0);		
     start=0;	
 		
@@ -82,14 +83,14 @@ void main()
 							{
 							case 11:
 								Ini_Lcd();
-								Disp(2,0,12,"歌曲1:播放中");
-								Disp(4,0,8,"16：退出");
+								Disp(4,5,6,"播放中");
+						  	Disp(4,0,8,"16：退出");
 								play_start(music1); 
 								break;//显示数据到LCD12864子程序
 							case 12:
 								Ini_Lcd();
-								Disp(2,0,12,"歌曲2:播放中");
-								Disp(4,0,8,"16：退出");
+								Disp(4,5,6,"播放中");
+						  	Disp(4,0,8,"16：退出");
 								play_start(music2);	
 								break;//显示数据到LCD12864子程
 							case 14:
@@ -124,14 +125,14 @@ void main()
 							{
 							case 11:
 								Ini_Lcd();
-								Disp(2,0,12,"歌曲3:播放中");
-								Disp(4,0,8,"16：退出");
+								Disp(4,5,6,"播放中");
+						  	Disp(4,0,8,"16：退出");
 								play_start(music3); 
 								break;//显示数据到LCD12864子程序
 							case 12:
 								Ini_Lcd();
-								Disp(2,0,11,"录音:播放中");
-								Disp(4,0,8,"16：退出");
+								Disp(4,5,6,"播放中");
+						  	Disp(4,0,8,"16：退出");
 								play_start(music6);	
 								break;//显示数据到LCD12864子程
 							case 13:
@@ -201,8 +202,8 @@ void main()
 							Disp(2,5,6,"low   ");
 							tune=-1;
 							break;
-                            default:
-                            Disp(2,5,6,"middle");
+              default:
+              Disp(2,5,6,"middle");
 							tune=0;
 							break;
 							}	
@@ -417,66 +418,11 @@ bee_Speak=!bee_Speak;
 
 TH0=T[m][0]; TL0=T[m][1];
 }
-/*
-void show_score (uchar (*music)[2])
- {
-    uchar i=0,j=0,num,tune;
-    char xdata score_infor[50][3]={0};//score_infor中存储乐谱的显示信息，第一维度为tune，第二维度为num，第三维度为time
-    m=music[0][0];
-    if (m>36)
-    return;
-    while (1)
-    {
-    m=music[i][0];n=music[i][1];
-    if (m>=13&&m<=24)
-    score_infor[j][0]=0;
-    else if ((m>24&&m<=36)||m==0)
-    score_infor[j][0]=1;
-    else if (m>=1&&m<13)
-    score_infor[j][0]=-1;
-    else
-    {
-    if (j)
-    j++;
-    score_infor[j][0]=2;
-    break;
-    }
-    m=m+12*tune;
-    if (m>=13&&m<=17)
-    num=(m-11)/2;
-    else if (m==0)
-    num=0;
-    else
-    num=(m-10)/2;
-    if (j==0||tune!=score_infor[j][0]||num!=score_infor[j][1])
-    {
-    if (j)
-    j++;
-    score_infor[j][0]=tune;
-    score_infor[j][1]=num;
-    score_infor[j][2]=1;
-    }
-    else
-    score_infor[j][2]++;
-    i++;
-    }
-    
-    i=1;
-    tune=score_infor[i][0];
-    Ini_Lcd();
-    while (tune!=2)
-    {   tune=score_infor[i][0];
-        //Disp(0,i,1,*(score_infor+1)+i);
-        Disp(2,0,2,"ab");
-        Delay_xMs(200);
-        i++;
-    }
- }*/
 
 void play_start(uchar (*music)[2])
 {
     uchar i=0,ii=0; 
-	uchar j,p=1;
+	uchar j,p=2;
     char xdata score[70][4]={0}; //score的第一个维度是tune，第二个维度是num
     char tune,num,time;
     TMOD=0x01; EA=1; ET0=1; 
@@ -488,7 +434,7 @@ void play_start(uchar (*music)[2])
     n=music[i][1];
     if(m==0x00)
 	{
-		TR0=0;delay(n*4);i++;
+		TR0=0;delay(n);i++;
 	} 
 	else if(m==0xFF)
 	{
@@ -498,7 +444,7 @@ void play_start(uchar (*music)[2])
 	else
 	{
 		TR0=1;
-		delay(n*4);
+		delay(n);
 		i++;
 	}
     }
@@ -575,14 +521,16 @@ void play_start(uchar (*music)[2])
                 {
                     switch (num)
                     {
-                        case 1: Disp(p,j,2,"1L"); break;
-                        case 2: Disp(p,j,2,"2L"); break;
-                        case 3: Disp(p,j,2,"3L"); break;
-                        case 4: Disp(p,j,2,"4L"); break;
-                        case 5: Disp(p,j,2,"5L"); break;
-                        case 6: Disp(p,j,2,"6L"); break;
-                        case 7: Disp(p,j,2,"7L"); break;
+                        case 1: Disp(p,j,2,"1"); break;
+                        case 2: Disp(p,j,2,"2"); break;
+                        case 3: Disp(p,j,2,"3"); break;
+                        case 4: Disp(p,j,2,"4"); break;
+                        case 5: Disp(p,j,2,"5"); break;
+                        case 6: Disp(p,j,2,"6"); break;
+                        case 7: Disp(p,j,2,"7"); break;
+                        
                     }
+                    Disp(p+1,j,1,&dot_l);
                     break;
                 }
                 case 0:
@@ -590,13 +538,13 @@ void play_start(uchar (*music)[2])
                     switch (num)
                     {
                         case 0: Disp(p,j,2,"0 "); break;
-                        case 1: Disp(p,j,2,"1M"); break;
-                        case 2: Disp(p,j,2,"2M"); break;
-                        case 3: Disp(p,j,2,"3M"); break;
-                        case 4: Disp(p,j,2,"4M"); break;
-                        case 5: Disp(p,j,2,"5M"); break;
-                        case 6: Disp(p,j,2,"6M"); break;
-                        case 7: Disp(p,j,2,"7M"); break;
+                        case 1: Disp(p,j,2,"1"); break;
+                        case 2: Disp(p,j,2,"2"); break;
+                        case 3: Disp(p,j,2,"3"); break;
+                        case 4: Disp(p,j,2,"4"); break;
+                        case 5: Disp(p,j,2,"5"); break;
+                        case 6: Disp(p,j,2,"6"); break;
+                        case 7: Disp(p,j,2,"7"); break;
                     }
                     break;
                 }
@@ -604,77 +552,42 @@ void play_start(uchar (*music)[2])
                 {
                     switch (num)
                     {
-                        case 1: Disp(p,j,2,"1H"); break;
-                        case 2: Disp(p,j,2,"2H"); break;
-                        case 3: Disp(p,j,2,"3H"); break;
-                        case 4: Disp(p,j,2,"4H"); break;
-                        case 5: Disp(p,j,2,"5H"); break;
-                        case 6: Disp(p,j,2,"6H"); break;
-                        case 7: Disp(p,j,2,"7H"); break;
+                        case 1: Disp(p,j,2,"1"); break;
+                        case 2: Disp(p,j,2,"2"); break;
+                        case 3: Disp(p,j,2,"3"); break;
+                        case 4: Disp(p,j,2,"4"); break;
+                        case 5: Disp(p,j,2,"5"); break;
+                        case 6: Disp(p,j,2,"6"); break;
+                        case 7: Disp(p,j,2,"7"); break;
                     }
+                    Disp(p-1,j,1,&dot_h);
                     break;
                 }
             }
 
-			/*if(m==13||m==1||m==25) {
-				Disp(p,j,2," 1");
-			}	
-			else if(m==14||m==2||m==26) {
-				Disp(p,j,2,"#1");
-			}			
-			else if(m==15||m==3||m==27) {
-				Disp(p,j,2," 2");
-			}
-			else if(m==16||m==4||m==28) {
-				Disp(p,j,2,"#2");
-			}
-			else if(m==17||m==5||m==29) {
-				Disp(p,j,2," 3");
-			}
-			else if(m==18||m==6||m==30) {
-				Disp(p,j,2," 4");
-			}
-			else if(m==19||m==7||m==31) {
-				Disp(p,j,2,"#4");
-			}
-			else if(m==20||m==8||m==32) {
-				Disp(p,j,2," 5");
-			}
-			else if(m==21||m==9||m==33) {
-				Disp(p,j,2,"#5");
-			}
-			else if(m==22||m==10||m==34) {
-				Disp(p,j,2," 6");
-			}
-			else if(m==23||m==11||m==35) {
-				Disp(p,j,2,"#6");
-			}
-			else if(m==24||m==12|m==36) {
-				Disp(p,j,2," 7");
-			}
-
-			else {
-				Disp(p,j,2," 0");
-			}*/
+			
 			if(j==7){
 				p++;
-				if(p==4) {
-					p=1;
+				//if(p==4) {
+                if (p==3)  {
+					//p=1;
+                    p=2;
 					Ini_Lcd();
 					Disp(4,0,8,"16：退出");
+					Disp(4,5,6,"播放中");
 				}
 			}	
 	    	//排除开机显示乐谱
         if (num==0)
         {
               TR0=0;
-              delay(score[i][2]*4);
+              delay(score[i][2]);
         }	
         else 
         {
             TR0=1;
             m=score[i][3];
-            delay(score[i][2]*4);
+            delay(score[i][2]);
         }
         i++;
 		/*if(m==0x00)
@@ -694,7 +607,6 @@ void play_start(uchar (*music)[2])
 		}*/
 	}
 }
-
 uchar scankey(void)//矩阵键盘翻转扫描
 {
 	uint keyvalue=0;
