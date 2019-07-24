@@ -21,6 +21,10 @@ void main()
 	P4M1=0x00;
 	P4M0=0x00;
 	Ini_Lcd();//液晶初始化子程序
+	WRCGRAM1(0x40);
+    WRCGRAM2(0x50);
+    WRCGRAM3(0x60);
+    WRCGRAM4(0x70);
 	Disp(1,0,16,"****************");//显示数据到LCD12864子程序			
 	Disp(2,0,14,"欢迎使用无弦琴");//显示数据到LCD12864子程序
 	Disp(3,0,12,"浙大光电学院");//显示数据到LCD12864子程序
@@ -150,7 +154,9 @@ void main()
 				break;
 			}
 			case 12:
-			{   Ini_Lcd();
+			{   
+                bit flag=0;
+                Ini_Lcd();
 				Disp(1,0,12,"进行弹奏模式");//显示数据到LCD12864子程序
 				Disp(4,0,12,"1.录2.停3.放");//显示数据到LCD12864子程序
 			  	while (1)
@@ -172,13 +178,16 @@ void main()
 							break;//显示数据到LCD12864子程序	
 			  			case 12:
 			  				Disp(3,0,8,"录音关闭");
-							k=0;music6[i+1][0]==0xFF;
-							music6[i+1][1]==0xFF;i=0;
+							k=0;
+                            flag=0;
+                            music6[i][0]=0xff;
+							music6[i][1]=0xff;
+                            i=0;
 							break;//显示数据到LCD12864子程序
 						case 13:
 							Disp(3,0,8,"播放录音");
                             //show_score(music0);
-							play_start(music6);
+							play_start(music6+1);
 							Disp(3,0,8,"退出播放");
 							break;//显示数据到LCD12864子程序
 					}
@@ -202,8 +211,8 @@ void main()
 							Disp(2,5,6,"low   ");
 							tune=-1;
 							break;
-              default:
-              Disp(2,5,6,"middle");
+                            default:
+                            Disp(2,5,6,"middle");
 							tune=0;
 							break;
 							}	
@@ -254,15 +263,31 @@ void main()
 							TR0=0;
 						 	Disp(2,0,8,"音调：0");
 						 }
-						 if(k==1){
-						 music6[i][0]=m;
+                         if (k==1&&flag==0)
+                         {
+                         if (m!=0)
+                         flag=1;
+                         for (i=0;i++;i<60)
+                         {
+                         music6[i][0]=0;
+                         music6[i][1]=0;
+                         }
+                         i=1;
+                         }
+						 if(k==1&&flag==1){
+                         if (music6[i-1][0]==m&&music6[i-1][1]==4)
+                         music6[i-1][1]=music6[i-1][1]+4;
+                         else
+                         {
+                         music6[i][0]=m;
 						 music6[i][1]=n*2;
-							i++;
+                         i++;
+                         }
 						 }
-						 if(i>=50){
+						 if(i>=61){
 						 	music6[i][0]=0xFF;
 							music6[i][1]=0xFF;
-							i=0;k=0;
+							i=0;k=0;flag=0;
 							Disp(3,0,8,"录音关闭");
 						 } 
 						 if(m==0)
@@ -369,16 +394,12 @@ void main()
 				break; }
 			}
             break;
-		}
-		 
+		}		 
 			default: break;
 		}
 	}
 }
 
-
-	
-	
 /*****************检测控制端口的状态*****************/
 uchar ctrl_port_check(void)
 {
@@ -423,8 +444,8 @@ void play_start(uchar (*music)[2])
 {
     uchar i=0,ii=0; 
 	uchar j,p=2;
-    char xdata score[70][4]={0}; //score的第一个维度是tune，第二个维度是num
-    char tune,num,time;
+    char xdata score[70][4]={0}; //score的第一个维度是tune，第二个维度是num，第三个维度是n，第四个维度是m
+    char tune,num;
     TMOD=0x01; EA=1; ET0=1; 
     if (start==1)
     {
@@ -507,7 +528,9 @@ void play_start(uchar (*music)[2])
 			}
 		}   
 				
-		num=score[i][1];tune=score[i][0];
+		num=score[i][1];
+        tune=score[i][0];
+        n=score[i][2];
 		//显示乐谱
             if (tune==2)
             {
@@ -530,14 +553,29 @@ void play_start(uchar (*music)[2])
                         case 7: Disp(p,j,2,"7"); break;
                         
                     }
-                    Disp(p+1,j,1,&dot_l);
+                    switch (n)
+                    {
+                        case 2: 
+                        Write_Cmd(0x88+j);
+                        Write_Data(0x00);
+                        Write_Data(0x06);
+                        break;
+                        case 4:
+                        Write_Cmd(0x88+j);
+                        Write_Data(0x00);
+                        Write_Data(0x04);
+                        break;
+                        case 8:
+                        Disp(p+1,j,1,&dot_l);
+                        break;
+                    }
                     break;
                 }
                 case 0:
                 {
                     switch (num)
                     {
-                        case 0: Disp(p,j,2,"0 "); break;
+                        case 0: Disp(p,j,2,"0"); break;
                         case 1: Disp(p,j,2,"1"); break;
                         case 2: Disp(p,j,2,"2"); break;
                         case 3: Disp(p,j,2,"3"); break;
@@ -545,6 +583,21 @@ void play_start(uchar (*music)[2])
                         case 5: Disp(p,j,2,"5"); break;
                         case 6: Disp(p,j,2,"6"); break;
                         case 7: Disp(p,j,2,"7"); break;
+                    }
+                    switch (n)
+                    {
+                        case 2: 
+                        Write_Cmd(0x88+j);
+                        Write_Data(0x00);
+                        Write_Data(0x02);
+                        break;
+                        case 4:
+                        Write_Cmd(0x88+j);
+                        Write_Data(0x00);
+                        Write_Data(0x00);
+                        break;
+                        case 8:
+                        break;
                     }
                     break;
                 }
@@ -560,12 +613,29 @@ void play_start(uchar (*music)[2])
                         case 6: Disp(p,j,2,"6"); break;
                         case 7: Disp(p,j,2,"7"); break;
                     }
+                    switch (n)
+                    {
+                        case 2: 
+                        Write_Cmd(0x88+j);
+                        Write_Data(0x00);
+                        Write_Data(0x02);
+                        Disp(p-1,j,1,&dot_h);
+                        break;
+                        case 4:
+                        Write_Cmd(0x88+j);
+                        Write_Data(0x00);
+                        Write_Data(0x00);
+                        Disp(p-1,j,1,&dot_h);
+                        break;
+                        case 8:
+                        Disp(p-1,j,1,&dot_h);
+                        break;
+                    }
                     Disp(p-1,j,1,&dot_h);
                     break;
                 }
             }
 
-			
 			if(j==7){
 				p++;
 				//if(p==4) {
@@ -574,7 +644,6 @@ void play_start(uchar (*music)[2])
                     p=2;
 					Ini_Lcd();
 					Disp(4,0,8,"16：退出");
-					Disp(4,5,6,"播放中");
 				}
 			}	
 	    	//排除开机显示乐谱
@@ -590,21 +659,6 @@ void play_start(uchar (*music)[2])
             delay(score[i][2]);
         }
         i++;
-		/*if(m==0x00)
-		{
-			TR0=0;delay(n);i++;
-		} 
-		else if(m==0xFF)
-		{
-			TR0=0;
-			return;
-		} 
-		else
-		{
-			TR0=1;
-			delay(n);
-			i++;
-		}*/
 	}
 }
 uchar scankey(void)//矩阵键盘翻转扫描
