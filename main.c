@@ -3,11 +3,12 @@
 #include "display.h"
 #define uchar unsigned char
 void play_start(uchar (*music)[2]);
+void show_score(uchar (*music)[2]);
 void delay(uchar p);
 uchar m,n; 
 
 
-
+uchar start=1;
 uchar port_status;
 uchar key,k=0;
 unsigned char Count;
@@ -18,12 +19,13 @@ void main()
 	uchar i=0;
 	P4M1=0x00;
 	P4M0=0x00;
-	Ini_Lcd();//“∫æß≥ı ºªØ◊”≥Ã–Ú
-	Disp(1,0,14,"ª∂”≠ π”√Œﬁœ“«Ÿ");//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú			
-	Disp(2,0,14,"ª∂”≠ π”√Œﬁœ“«Ÿ");//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
-	Disp(3,0,14,"ª∂”≠ π”√Œﬁœ“«Ÿ");//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
-	Disp(4,0,12,"’„¥Ûπ‚µÁ—ß‘∫");//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
-	play_start(music0);			 
+	Ini_Lcd();//Ê∂≤Êô∂ÂàùÂßãÂåñÂ≠êÁ®ãÂ∫è
+	Disp(1,0,14,"Ê¨¢Ëøé‰ΩøÁî®Êó†Âº¶Áê¥");//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è			
+	Disp(2,0,14,"Ê¨¢Ëøé‰ΩøÁî®Êó†Âº¶Áê¥");//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
+	Disp(3,0,14,"Ê¨¢Ëøé‰ΩøÁî®Êó†Âº¶Áê¥");//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
+	Disp(4,0,12,"ÊµôÂ§ßÂÖâÁîµÂ≠¶Èô¢");//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
+	play_start(music0);		
+  start=0;	
 		
 	while(1)
 	{
@@ -31,11 +33,11 @@ void main()
 		KeyIO=0xf0;
 		P4M1=0x00;
 		P4M0=0x00;
-		Ini_Lcd();//“∫æß≥ı ºªØ◊”≥Ã–Ú			
-		Disp(1,0,8,"—°‘Òπ¶ƒ‹");//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
-		Disp(2,0,10,"1.“Ù¿÷≤•∑≈");//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
-		Disp(3,0,10,"2.“Ù¿÷—›◊‡");//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
-		Disp(4,0,10,"3.”È¿÷π¶ƒ‹");//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
+		Ini_Lcd();//Ê∂≤Êô∂ÂàùÂßãÂåñÂ≠êÁ®ãÂ∫è			
+		Disp(1,0,8,"ÈÄâÊã©ÂäüËÉΩ");//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
+		Disp(2,0,10,"1.Èü≥‰πêÊí≠Êîæ");//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
+		Disp(3,0,10,"2.Èü≥‰πêÊºîÂ•è");//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
+		Disp(4,0,10,"3.Â®±‰πêÂäüËÉΩ");//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
 		while (1)
 			{
 				if ((KeyIO&0xf0)!=0xf0)
@@ -59,11 +61,11 @@ void main()
 							{
 							key=00;
 							KeyIO=0xf0;
-							Ini_Lcd();//“∫æß≥ı ºªØ◊”≥Ã–Ú
-							Disp(1,0,14,"«Î—°‘Ò≤•∑≈∏Ë«˙");//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú			
-							Disp(2,0,8,"1.∏Ë«˙1");//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
-							Disp(3,0,8,"2.∏Ë«˙2");//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
-							Disp(4,0,8,"4.œ¬“ª“≥");//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
+							Ini_Lcd();//Ê∂≤Êô∂ÂàùÂßãÂåñÂ≠êÁ®ãÂ∫è
+							Disp(1,0,14,"ËØ∑ÈÄâÊã©Êí≠ÊîæÊ≠åÊõ≤");//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è			
+							Disp(2,0,8,"1.Ê≠åÊõ≤1");//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
+							Disp(3,0,8,"2.Ê≠åÊõ≤2");//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
+							Disp(4,0,8,"4.‰∏ã‰∏ÄÈ°µ");//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
 							while (1)
 							{
 								if ((KeyIO&0xf0)!=0xf0)
@@ -80,16 +82,16 @@ void main()
 							{
 							case 11:
 								Ini_Lcd();
-								Disp(2,0,12,"∏Ë«˙1:≤•∑≈÷–");
-								Disp(4,0,8,"16£∫ÕÀ≥ˆ");
+								Disp(2,0,12,"Ê≠åÊõ≤1:Êí≠Êîæ‰∏≠");
+								Disp(4,0,8,"16ÔºöÈÄÄÂá∫");
 								play_start(music1); 
-								break;//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
+								break;//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
 							case 12:
 								Ini_Lcd();
-								Disp(2,0,12,"∏Ë«˙2:≤•∑≈÷–");
-								Disp(4,0,8,"16£∫ÕÀ≥ˆ");
+								Disp(2,0,12,"Ê≠åÊõ≤2:Êí≠Êîæ‰∏≠");
+								Disp(4,0,8,"16ÔºöÈÄÄÂá∫");
 								play_start(music2);	
-								break;//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã
+								break;//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ã
 							case 14:
 								page=2;
 								break;
@@ -101,11 +103,11 @@ void main()
 							{
 							key=00;
 							KeyIO=0xf0;
-							Ini_Lcd();//“∫æß≥ı ºªØ◊”≥Ã–Ú
-							Disp(1,0,14,"«Î—°‘Ò≤•∑≈∏Ë«˙");//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú			
-							Disp(2,0,8,"1.∏Ë«˙3");//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
-							Disp(3,0,10,"2.¬º“Ù≤•∑≈");//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
-							Disp(4,0,8,"3.…œ“ª“≥");//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
+							Ini_Lcd();//Ê∂≤Êô∂ÂàùÂßãÂåñÂ≠êÁ®ãÂ∫è
+							Disp(1,0,14,"ËØ∑ÈÄâÊã©Êí≠ÊîæÊ≠åÊõ≤");//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è			
+							Disp(2,0,8,"1.Ê≠åÊõ≤3");//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
+							Disp(3,0,10,"2.ÂΩïÈü≥Êí≠Êîæ");//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
+							Disp(4,0,8,"3.‰∏ä‰∏ÄÈ°µ");//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
 							while (1)
 							{
 								if ((KeyIO&0xf0)!=0xf0)
@@ -122,16 +124,16 @@ void main()
 							{
 							case 11:
 								Ini_Lcd();
-								Disp(2,0,12,"∏Ë«˙3:≤•∑≈÷–");
-								Disp(4,0,8,"16£∫ÕÀ≥ˆ");
+								Disp(2,0,12,"Ê≠åÊõ≤3:Êí≠Êîæ‰∏≠");
+								Disp(4,0,8,"16ÔºöÈÄÄÂá∫");
 								play_start(music3); 
-								break;//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
+								break;//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
 							case 12:
 								Ini_Lcd();
-								Disp(2,0,11,"¬º“Ù:≤•∑≈÷–");
-								Disp(4,0,8,"16£∫ÕÀ≥ˆ");
+								Disp(2,0,11,"ÂΩïÈü≥:Êí≠Êîæ‰∏≠");
+								Disp(4,0,8,"16ÔºöÈÄÄÂá∫");
 								play_start(music6);	
-								break;//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã
+								break;//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ã
 							case 13:
 								page=1;
 								break;
@@ -146,128 +148,229 @@ void main()
 				}
 				break;
 			}
-			
 			case 12:
-		  { 
-			  char tune=0;
-			  key=00;
-			  KeyIO=0xF0; 
-			  Ini_Lcd();
-			  Disp(1,0,12,"Ω¯––µØ◊‡ƒ£ Ω");//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
-			  Disp(4,0,12,"1.¬º2.Õ£3.∑≈");//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
-			  while(key!=44)
-			  {
-			  if((P1&0xf0)!=0xf0) //»Áπ˚”–º¸∞¥œ¬
-		    {
-		      Delay_xMs(100);   //—” ±»•∂∂∂Ø
-		      if((KeyIO&0xf0)!=0xf0)   //‘Ÿ≈–∂œ
-		      {
-						key=scankey();
-						switch(key)
+			{   Ini_Lcd();
+				Disp(1,0,12,"ËøõË°åÂºπÂ•èÊ®°Âºè");//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
+				Disp(4,0,12,"1.ÂΩï2.ÂÅú3.Êîæ");//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
+			  	while (1)
+			  	{
+			  		char tune=0;
+					key=00;
+					KeyIO=0xf0;
+					if ((P1&0xf0)!=0xf0)
+			  		{
+				  		Delay_xMs(100);
+						if ((P1&0xf0)!=0xf0)
+						key=scankey();	
+					} 
+                    switch(key)
+			  		{
+			  			case 11:
+							Disp(3,0,8,"ÂΩïÈü≥ÂºÄÂêØ");
+							k=1;i=0;
+							break;//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è	
+			  			case 12:
+			  				Disp(3,0,8,"ÂΩïÈü≥ÂÖ≥Èó≠");
+							k=0;music6[i+1][0]==0xFF;
+							music6[i+1][1]==0xFF;i=0;
+							break;//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
+						case 13:
+							Disp(3,0,8,"Êí≠ÊîæÂΩïÈü≥");
+                            show_score(music0);
+							play_start(music6);
+							Disp(3,0,8,"ÈÄÄÂá∫Êí≠Êîæ");
+							break;//ÊòæÁ§∫Êï∞ÊçÆÂà∞LCD12864Â≠êÁ®ãÂ∫è
+					}
+					key_tune=00;
+					KeyIO=0xf0;
+					if ((P1&0xf0)!=0xf0)
+					{
+						Delay_xMs(50);
+					 	if ((P1&0xf0)!=0xf0)
+					 	key_tune=scankey();
+					}
+					if (OPT_CHECK!=0xff)
 						{
-							case 11:Disp(3,0,8,"¬º“Ùø™∆Ù");	k=1;i=0;break;//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
-							case 12:Disp(3,0,8,"¬º“Ùπÿ±’");  k=0;music6[i+1][0]==0xFF;	music6[i+1][1]==0xFF;i=0;break;//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
-							case 13:Disp(3,0,8,"≤•∑≈¬º“Ù");play_start(music6);Disp(3,0,8,"ÕÀ≥ˆ≤•∑≈");	break;//œ‘ æ ˝æ›µΩLCD12864◊”≥Ã–Ú
-						}
-					}   
-				}
+							switch(key_tune)
+							{
+							case 41:
+							Disp(2,5,6,"high  ");
+							tune=1;
+							break;
+							case 42:
+							Disp(2,5,6,"low   ");
+							tune=-1;
+							break;
+                            default:
+                            Disp(2,5,6,"middle");
+							tune=0;
+							break;
+							}	
+						 }
+		  				if(!(OPT_CHECK&0x01))
+						 {
+						    Disp(2,0,8,"Èü≥Ë∞ÉÔºö1");
+							 m=13+12*tune,n=2;
+							 
+						 }
+						 else if(!(OPT_CHECK&0x02))
+						 {
+						   Disp(2,0,8,"Èü≥Ë∞ÉÔºö2");
+							 m=15+12*tune,n=2;
+							 
+						 }
+						 else if(!(OPT_CHECK&0x04))
+						 {
+						   Disp(2,0,8,"Èü≥Ë∞ÉÔºö3");
+							 m=17+12*tune,n=2;
+							 
+						 }
+						 else if(!(OPT_CHECK&0x08))
+						 {
+						   Disp(2,0,8,"Èü≥Ë∞ÉÔºö4");
+							 m=18+12*tune,n=2;
+							 
+						 }
+						 else if(!(OPT_CHECK&0x10))
+						 {
+						  Disp(2,0,8,"Èü≥Ë∞ÉÔºö5");
+							 m=20+12*tune,n=2;
+							
+						 }
+						 else if(!(OPT_CHECK&0x20))
+						 {
+						   Disp(2,0,8,"Èü≥Ë∞ÉÔºö6");
+							 m=22+12*tune,n=2;
+							 
+						 }
+						 else if(!(OPT_CHECK&0x40))
+						 {
+						   Disp(2,0,8,"Èü≥Ë∞ÉÔºö7");
+							 m=24+12*tune,n=2;
+						 }
+						 else{
+						 	m=0,n=2;
+							TR0=0;
+						 	Disp(2,0,8,"Èü≥Ë∞ÉÔºö0");
+						 }
+						 if(k==1){
+						 music6[i][0]=m;
+						 music6[i][1]=n*2;
+							i++;
+						 }
+						 if(i>=50){
+						 	music6[i][0]=0xFF;
+							music6[i][1]=0xFF;
+							i=0;k=0;
+							Disp(3,0,8,"ÂΩïÈü≥ÂÖ≥Èó≠");
+						 } 
+						 if(m==0)
+							{
+							TR0=0;
+							delay(n);}
+						 else
+						 	{
+							 TR0=1;
+							 delay(n);
+							}
+						if (key==43)
+						break;
+			  	}
+			  	break;
+			}
+            case 13:
+		{   char flag2=0,flag=1,mm,nn,sum,check;
+			Ini_Lcd();	
+			Disp(1,0,8,"ÊºîÂ•èÂ§ßÂ∏à");
+			sum=42;
+			if(flag2==0){
+			for(i=1;i<=42;i++){
+				flag=1;
+				mm=music4[i][0];
 				
-			 OPT_CHECK = 0xFF;
-			 key_tune=00;
-			 KeyIO=0xf0;
-			 if ((P1&0xf0)!=0xf0)
-			 {
-			 	Delay_xMs(50);
-			 	if ((P1&0xf0)!=0xf0)
-			 	key_tune=scankey();
-			 }
-			 if (OPT_CHECK!=0xff)
+				if(mm==13) Disp(2,0,8,"ÂºπÂ•èÔºö1");
+				else if(mm==15) Disp(2,0,8,"ÂºπÂ•èÔºö2");
+				else if(mm==17) Disp(2,0,8,"ÂºπÂ•èÔºö3");
+				else if(mm==18) Disp(2,0,8,"ÂºπÂ•èÔºö4");
+				else if(mm==20) Disp(2,0,8,"ÂºπÂ•èÔºö5");
+				else if(mm==22) Disp(2,0,8,"ÂºπÂ•èÔºö6");
+				else if(mm==24) Disp(2,0,8,"ÂºπÂ•èÔºö7");
+			        while(flag==1){
+				if(!(OPT_CHECK&0x01))
 				 {
-					 switch(key_tune)
-					 {
-					 	case 00:
-					 	Disp(3,0,6,"middle");
-					 	tune=0;
-					 	break;
-					 	case 41:
-					 	Disp(3,0,6,"high  ");
-					 	tune=1;
-					 	break;
-					 	case 42:
-					 	Disp(3,0,6,"low   ");
-					 	tune=-1;
-					 	break;
-					 }	
-				 }
-			 
-  				if(!(OPT_CHECK&0x01))
-				 {
-				    Disp(2,0,8,"“Ùµ˜£∫1");
-					 m=13+12*tune,n=2;
-					 
+				    Disp(3,0,8,"Èü≥Ë∞ÉÔºö1");
+					  nn=13;flag=0;
+					 m=13,n=8;
 				 }
 				 else if(!(OPT_CHECK&0x02))
 				 {
-				   Disp(2,0,8,"“Ùµ˜£∫2");
-					 m=15+12*tune,n=2;
-					 
+				   Disp(3,0,8,"Èü≥Ë∞ÉÔºö2");
+					 nn=15;flag=0;
+					 m=15,n=8;
 				 }
 				 else if(!(OPT_CHECK&0x04))
 				 {
-				   Disp(2,0,8,"“Ùµ˜£∫3");
-					 m=17+12*tune,n=2;
-					 
+				   Disp(3,0,8,"Èü≥Ë∞ÉÔºö3");
+					 nn=17;flag=0;
+					 m=17,n=8;
 				 }
 				 else if(!(OPT_CHECK&0x08))
 				 {
-				   Disp(2,0,8,"“Ùµ˜£∫4");
-					 m=18+12*tune,n=2;
-					 
+				   Disp(3,0,8,"Èü≥Ë∞ÉÔºö4");
+					 nn=18;flag=0;
+					 m=18,n=8;
 				 }
 				 else if(!(OPT_CHECK&0x10))
 				 {
-				  Disp(2,0,8,"“Ùµ˜£∫5");
-					 m=20+12*tune,n=2;
-					
+				  Disp(3,0,8,"Èü≥Ë∞ÉÔºö5");
+					 nn=20;flag=0;
+					 m=20,n=8;
 				 }
 				 else if(!(OPT_CHECK&0x20))
 				 {
-				   Disp(2,0,8,"“Ùµ˜£∫6");
-					 m=22+12*tune,n=2;
-					 
+				   Disp(3,0,8,"Èü≥Ë∞ÉÔºö6");
+					 nn=22;flag=0;
+					 m=22,n=8;
 				 }
 				 else if(!(OPT_CHECK&0x40))
 				 {
-				   Disp(2,0,8,"“Ùµ˜£∫7");
-					 m=24+12*tune,n=2;
+				   Disp(3,0,8,"Èü≥Ë∞ÉÔºö7");
+					 nn=24;flag=0;
+					 m=24,n=8;
 				 }
 				 else{
-				 	m=0,n=2;
-					 TR0=0;
-				 	Disp(2,0,8,"“Ùµ˜£∫0");
+				   nn=0;m=0,n=2;
+				 	 Disp(3,0,8,"Èü≥Ë∞ÉÔºö0");
 				 }
-				 
-				 if(k==1){
-				 music6[i][0]=m;
-					music6[i][1]=n*2;
-					i++;
-				 }
-				 
-				 if(i>=50){
-				 music6[i][0]=0xFF;
-					music6[i][1]=0xFF;
-					i=0;k=0;
-					 Disp(3,0,8,"¬º“Ùπÿ±’");
-				 } 
-				 if(m==0)
-      	{TR0=0;delay(n);}
-         else
-{TR0=1;delay(n);}
-				 
-		}	
+				 if(m==0x00)
+        			 {TR0=0;delay(n);} 
+        			 else
+        			 {TR0=1;delay(n);}
+			 }
+			 Delay_xMs(2000);
+			 if(mm==nn) check++;
+			 if(i==42) flag2=1;
+			}
+		  }
+			if(sum-check<=1) Disp(4,0,4,"ÂÆåÁæé");
+			else if((sum-check>1)&&(sum-check<=5)) Disp(4,0,4,"‰∏çÈîô");
+			else if((sum-check>5)&&(sum-check<=20)) Disp(4,0,4,"ËøòË°å");
+			else if(sum-check>20) Disp(4,0,4,"Â§±Ë¥•");
+            key=00;
+		    KeyIO=0xf0;
+            while (1)
+			{
+				if ((KeyIO&0xf0)!=0xf0)
+				Delay_xMs(100);
+				if((KeyIO&0xf0)!=0xf0){
+				key=scankey();
+                if (key==43)
+				break; }
+			}
+            break;
 		}
-		break;
-		default: break;  	
+		 
+			default: break;
 		}
 	}
 }
@@ -275,7 +378,7 @@ void main()
 
 	
 	
-/*****************ºÏ≤‚øÿ÷∆∂Àø⁄µƒ◊¥Ã¨*****************/
+/*****************Ê£ÄÊµãÊéßÂà∂Á´ØÂè£ÁöÑÁä∂ÊÄÅ*****************/
 uchar ctrl_port_check(void)
 {
 		SW_CTRL = 0xFF;
@@ -284,7 +387,7 @@ uchar ctrl_port_check(void)
 
 
 	 
-/****************—”≥Ÿ∫¡√Î ˝************************/
+/****************Âª∂ËøüÊØ´ÁßíÊï∞************************/
 void Delay_xMs(unsigned int x)
 {
     unsigned int i,j;
@@ -314,50 +417,166 @@ bee_Speak=!bee_Speak;
 
 TH0=T[m][0]; TL0=T[m][1];
 }
+
+void show_score (uchar (*music)[2])
+ {
+    uchar i=0,j=0,num,tune;
+    char xdata score_infor[50][3]={0};//score_infor‰∏≠Â≠òÂÇ®‰πêË∞±ÁöÑÊòæÁ§∫‰ø°ÊÅØÔºåÁ¨¨‰∏ÄÁª¥Â∫¶‰∏∫tuneÔºåÁ¨¨‰∫åÁª¥Â∫¶‰∏∫numÔºåÁ¨¨‰∏âÁª¥Â∫¶‰∏∫time
+    m=music[0][0];
+    if (m>36)
+    return;
+    while (1)
+    {
+    m=music[i][0];n=music[i][1];
+    if (m>=13&&m<=24)
+    score_infor[j][0]=0;
+    else if ((m>24&&m<=36)||m==0)
+    score_infor[j][0]=1;
+    else if (m>=1&&m<13)
+    score_infor[j][0]=-1;
+    else
+    {
+    if (j)
+    j++;
+    score_infor[j][0]=2;
+    break;
+    }
+    m=m+12*tune;
+    if (m>=13&&m<=17)
+    num=(m-11)/2;
+    else if (m==0)
+    num=0;
+    else
+    num=(m-10)/2;
+    if (j==0||tune!=score_infor[j][0]||num!=score_infor[j][1])
+    {
+    if (j)
+    j++;
+    score_infor[j][0]=tune;
+    score_infor[j][1]=num;
+    score_infor[j][2]=1;
+    }
+    else
+    score_infor[j][2]++;
+    i++;
+    }
+    
+    i=1;
+    tune=score_infor[i][0];
+    Ini_Lcd();
+    while (tune!=2)
+    {   tune=score_infor[i][0];
+        //Disp(0,i,1,*(score_infor+1)+i);
+        Disp(2,0,2,"ab");
+        Delay_xMs(200);
+        i++;
+    }
+ }
+
 void play_start(uchar (*music)[2])
 {
-uchar i=0; 
-TMOD=0x01; EA=1; ET0=1; 
+	uchar i=0; 
+	uchar j,p=1;
+	TMOD=0x01; EA=1; ET0=1; 
 
-while(1) 
-{
-if((P1&0xf0)!=0xf0) //»Áπ˚”–º¸∞¥œ¬
-{
-	Delay_xMs(100);   //—” ±»•∂∂∂Ø
-	if((KeyIO&0xf0)!=0xf0)   //‘Ÿ≈–∂œ
+	while(1) 
 	{
-		key=scankey();
-	  if(key==44){
-		  TR0=0;
-      return;
-	  }
-	}
-}   
+		if((P1&0xf0)!=0xf0) //Â¶ÇÊûúÊúâÈîÆÊåâ‰∏ã
+    	{
+			Delay_xMs(100);   //Âª∂Êó∂ÂéªÊäñÂä®
+			if((KeyIO&0xf0)!=0xf0)   //ÂÜçÂà§Êñ≠
+			{
+				key=scankey();
+			    if(key==44){
+					TR0=0;
+      			    return;
+	   			}
+			}
+		}   
 				
-m=music[i][0];n=music[i][1];				
-if(m==0x00)
-{TR0=0;delay(n);i++;} 
-else if(m==0xFF)
-{TR0=0;
-return;
-} 
-else
-{TR0=1;delay(n);i++;}
-}
+		m=music[i][0];n=music[i][1];
+		//ÊòæÁ§∫‰πêË∞± 
+		if(start==0){
+			j=i%8;
+			if(m==13||m==1||m==25) {
+				Disp(p,j,2," 1");
+			}	
+			else if(m==14||m==2||m==26) {
+				Disp(p,j,2,"#1");
+			}			
+			else if(m==15||m==3||m==27) {
+				Disp(p,j,2," 2");
+			}
+			else if(m==16||m==4||m==28) {
+				Disp(p,j,2,"#2");
+			}
+			else if(m==17||m==5||m==29) {
+				Disp(p,j,2," 3");
+			}
+			else if(m==18||m==6||m==30) {
+				Disp(p,j,2," 4");
+			}
+			else if(m==19||m==7||m==31) {
+				Disp(p,j,2,"#4");
+			}
+			else if(m==20||m==8||m==32) {
+				Disp(p,j,2," 5");
+			}
+			else if(m==21||m==9||m==33) {
+				Disp(p,j,2,"#5");
+			}
+			else if(m==22||m==10||m==34) {
+				Disp(p,j,2," 6");
+			}
+			else if(m==23||m==11||m==35) {
+				Disp(p,j,2,"#6");
+			}
+			else if(m==24||m==12|m==36) {
+				Disp(p,j,2," 7");
+			}
+
+			else {
+				Disp(p,j,2," 0");
+			}
+			if(j==7){
+				p++;
+				if(p==4) {
+					p=1;
+					Ini_Lcd();
+					Disp(4,0,8,"16ÔºöÈÄÄÂá∫");
+				}
+			}	
+	    }	//ÊéíÈô§ÂºÄÊú∫ÊòæÁ§∫‰πêË∞±	
+		if(m==0x00)
+		{
+			TR0=0;delay(n);i++;
+		} 
+		else if(m==0xFF)
+		{
+			TR0=0;
+			return;
+		} 
+		else
+		{
+			TR0=1;
+			delay(n);
+			i++;
+		}
+	}
 }
 
-uchar scankey(void)//æÿ’Ûº¸≈Ã∑≠◊™…®√Ë
+uchar scankey(void)//Áü©ÈòµÈîÆÁõòÁøªËΩ¨Êâ´Êèè
 {
 	uint keyvalue=0;
 	uchar temp1,temp2,keycode;
 
-	KeyIO=0xf0;		//––÷√0¡–÷√1
+	KeyIO=0xf0;		//Ë°åÁΩÆ0ÂàóÁΩÆ1
 	temp1=KeyIO&0xf0;
-	if((temp1&0xf0)==0xf0) return(0);  //»ÙŒﬁº¸∞¥œ¬∑µªÿ0
+	if((temp1&0xf0)==0xf0) return(0);  //Ëã•Êó†ÈîÆÊåâ‰∏ãËøîÂõû0
 	KeyIO=0x0f;
-	temp2=KeyIO&0x0f;					   //»Ù”–º¸∞¥œ¬£¨––÷√1¡–÷√0
-	keycode=~(temp1|temp2);			   //ªÒµ√º¸≈Ã¬Î
-	switch(keycode)					   //∏˘æ›º¸≈Ã¬Î∑µªÿº¸÷µ
+	temp2=KeyIO&0x0f;					   //Ëã•ÊúâÈîÆÊåâ‰∏ãÔºåË°åÁΩÆ1ÂàóÁΩÆ0
+	keycode=~(temp1|temp2);			   //Ëé∑ÂæóÈîÆÁõòÁ†Å
+	switch(keycode)					   //Ê†πÊçÆÈîÆÁõòÁ†ÅËøîÂõûÈîÆÂÄº
 	{
 		case 0x11:return(11);break;
 		case 0x21:return(12);break;
@@ -380,5 +599,5 @@ uchar scankey(void)//æÿ’Ûº¸≈Ã∑≠◊™…®√Ë
 	return(0);
 }
 
-//∞¥»Œ“‚º¸ÕÀ≥ˆ
+//Êåâ‰ªªÊÑèÈîÆÈÄÄÂá∫
 
