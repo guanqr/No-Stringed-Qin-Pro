@@ -215,7 +215,7 @@ void main()
 						case 13:
                             if (music6[1][0]==0)
                             {
-                            Disp(3,0,6,"Œﬁ“Ù∆µ");
+                            Disp(3,0,8,"Œﬁ“Ù∆µ  ");
                             break;
 							}
                             //show_score(music0);
@@ -363,6 +363,7 @@ void main()
 					if ((KeyIO&0xf0)!=0xf0)
 					{
 						key=scankey();	
+						if (key==43||key==11||key==12)
 						break;
 						}
 					}
