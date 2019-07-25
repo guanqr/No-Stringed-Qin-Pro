@@ -22,15 +22,15 @@ void main()
 	P4M0=0x00;
 	Ini_Lcd();//液晶初始化子程序
 	WRCGRAM1(0x40);
-    WRCGRAM2(0x50);
-    WRCGRAM3(0x60);
-    WRCGRAM4(0x70);
+	WRCGRAM2(0x50);
+	WRCGRAM3(0x60);
+	WRCGRAM4(0x70);
 	Disp(1,0,16,"****************");//显示数据到LCD12864子程序			
 	Disp(2,0,14,"欢迎使用无弦琴");//显示数据到LCD12864子程序
 	Disp(3,0,12,"浙大光电学院");//显示数据到LCD12864子程序
 	Disp(4,0,16,"****************");//显示数据到LCD12864子程序
 	play_start(music0);		
-    start=0;	
+	start=0;	
 		
 	while(1)
 	{
@@ -211,8 +211,8 @@ void main()
 							Disp(2,5,6,"low   ");
 							tune=-1;
 							break;
-                            default:
-                            Disp(2,5,6,"middle");
+              default:
+              Disp(2,5,6,"middle");
 							tune=0;
 							break;
 							}	
@@ -304,16 +304,48 @@ void main()
 			  	}
 			  	break;
 			}
-            case 13:
-		{   char flag2=0,flag=1,mm,nn,sum,check;
+      case 13:
+		{   
+			char flag2=1,flag=1,mm,nn,sum,check,choice;
 			Ini_Lcd();	
 			Disp(1,0,8,"演奏大师");
-			sum=42;
+			Disp(2,0,6,"小星星");
+			Disp(3,0,8,"同桌的你");
+			key=00;
+		    KeyIO=0xf0;
+      while (1)
+							{
+								if ((KeyIO&0xf0)!=0xf0)
+								{
+									Delay_xMs(100);
+									if ((KeyIO&0xf0)!=0xf0)
+									{
+										key=scankey();	
+										break;
+									}
+								}
+							}
+				switch(key){
+					case 11:
+						flag2=0;
+						choice=1;
+					  break;	
+					case 12:
+						flag2=0;
+						choice=2;
+					  break;
+					default: break;
+				}
+			sum=0;
 			if(flag2==0){
-			for(i=1;i<=42;i++){
+				Ini_Lcd();
+			for(i=1;;i++){
+				sum++;
 				flag=1;
-				mm=music4[i][0];
-				
+				if(choice==1)
+					mm=music4[i][0];
+				else if(choice==2)
+					mm=music5[i][0];
 				if(mm==13) Disp(2,0,8,"弹奏：1");
 				else if(mm==15) Disp(2,0,8,"弹奏：2");
 				else if(mm==17) Disp(2,0,8,"弹奏：3");
@@ -321,6 +353,9 @@ void main()
 				else if(mm==20) Disp(2,0,8,"弹奏：5");
 				else if(mm==22) Disp(2,0,8,"弹奏：6");
 				else if(mm==24) Disp(2,0,8,"弹奏：7");
+				else if(mm==0) {
+					flag2=1;break;
+				}
 			        while(flag==1){
 				if(!(OPT_CHECK&0x01))
 				 {
@@ -375,25 +410,23 @@ void main()
 			 }
 			 Delay_xMs(2000);
 			 if(mm==nn) check++;
-			 if(i==42) flag2=1;
+			 //if(i==42) flag2=1;
 			}
 		  }
 			if(sum-check<=1) Disp(4,0,4,"完美");
 			else if((sum-check>1)&&(sum-check<=5)) Disp(4,0,4,"不错");
 			else if((sum-check>5)&&(sum-check<=20)) Disp(4,0,4,"还行");
 			else if(sum-check>20) Disp(4,0,4,"失败");
-            key=00;
-		    KeyIO=0xf0;
-            while (1)
+      while (1)
 			{
 				if ((KeyIO&0xf0)!=0xf0)
 				Delay_xMs(100);
 				if((KeyIO&0xf0)!=0xf0){
 				key=scankey();
-                if (key==43)
+        if (key==43)
 				break; }
-			}
-            break;
+			} 
+      break;
 		}		 
 			default: break;
 		}
@@ -422,28 +455,28 @@ void Delay_xMs(unsigned int x)
 
 void delay(uchar p)
 {
-uchar i,j; 
-for(;p>0;p--)
-for(i=181;i>0;i--)
-for(j=181;j>0;j--);
+	uchar i,j; 
+	for(;p>0;p--)
+	for(i=181;i>0;i--)
+	for(j=181;j>0;j--);
 }
 void pause()
 {
-uchar i,j;
-for(i=150;i>0;i--)
-for(j=150;j>0;j--);
+	uchar i,j;
+	for(i=150;i>0;i--)
+	for(j=150;j>0;j--);
 }
 void T0_int() interrupt 1
 {
-bee_Speak=!bee_Speak;
-
-TH0=T[m][0]; TL0=T[m][1];
+	bee_Speak=!bee_Speak;
+	TH0=T[m][0]; 
+	TL0=T[m][1];
 }
 
 void play_start(uchar (*music)[2])
 {
     uchar i=0,ii=0; 
-	uchar j,p=2;
+		uchar j,p=2;
     char xdata score[70][4]={0}; //score的第一个维度是tune，第二个维度是num，第三个维度是n，第四个维度是m
     char tune,num;
     TMOD=0x01; EA=1; ET0=1; 
