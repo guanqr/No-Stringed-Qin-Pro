@@ -1,4 +1,5 @@
 #include "sys_fun.h"
+#include "image.h"
 #include "songs.h"
 #include "display.h"
 #define uchar unsigned char
@@ -18,6 +19,13 @@ uchar key_1,key_tune;
 void main()
 { 
 	uchar i=0;
+	
+	uchar clong,hight;
+	hight=32;
+	clong=16;
+	Ini_Lcd();//液晶初始化子程序
+	WRGDRAM(0x80,clong,hight,gImage_1);//开机图片
+	
 	P4M1=0x00;
 	P4M0=0x00;
 	Ini_Lcd();//液晶初始化子程序
@@ -134,9 +142,29 @@ void main()
 								play_start(music3); 
 								break;//显示数据到LCD12864子程序
 							case 12:
+                                if (music6[1][0]==0)
+                                {
+                                Ini_Lcd();
+                                Disp(4,0,8,"16：退出");
+                                Disp(4,5,6,"无音频");
+                                KeyIO=0xf0;
+                                while (1)
+                                {
+                                    if ((P1&0xf0)!=0xf0)
+                					{
+                						Delay_xMs(50);
+                					 	if ((P1&0xf0)!=0xf0)
+                					 	{
+                                        if (scankey()==44)
+                                        break;
+                                        }
+                					}
+                                }
+                                break;
+    							}
 								Ini_Lcd();
 								Disp(4,5,6,"播放中");
-						  	Disp(4,0,8,"16：退出");
+						  	    Disp(4,0,8,"16：退出");
 								play_start(music6);	
 								break;//显示数据到LCD12864子程
 							case 13:
@@ -185,10 +213,18 @@ void main()
                             i=0;
 							break;//显示数据到LCD12864子程序
 						case 13:
-							Disp(3,0,8,"播放录音");
+                            if (music6[1][0]==0)
+                            {
+                            Disp(3,0,6,"无音频");
+                            break;
+							}
                             //show_score(music0);
+                            Ini_Lcd();
+                            Disp(4,0,8,"16：退出");
 							play_start(music6+1);
-							Disp(3,0,8,"退出播放");
+                            Ini_Lcd();
+                            Disp(1,0,12,"进行弹奏模式");//显示数据到LCD12864子程序
+				            Disp(4,0,12,"1.录2.停3.放");//显示数据到LCD12864子程序
 							break;//显示数据到LCD12864子程序
 					}
 					key_tune=00;
@@ -200,7 +236,7 @@ void main()
 					 	key_tune=scankey();
 					}
 					if (OPT_CHECK!=0xff)
-						{
+						  {
 							switch(key_tune)
 							{
 							case 41:
@@ -211,8 +247,8 @@ void main()
 							Disp(2,5,6,"low   ");
 							tune=-1;
 							break;
-              default:
-              Disp(2,5,6,"middle");
+                            default:
+                            Disp(2,5,6,"middle");
 							tune=0;
 							break;
 							}	
@@ -300,12 +336,18 @@ void main()
 							 delay(n);
 							}
 						if (key==43)
-						break;
+                        {
+                            TR0=0;
+                            break;
+                        }
+						
 			  	}
 			  	break;
 			}
-      case 13:
+       case 13:
 		{   
+            while(1)
+            {
 			char flag2=1,flag=1,mm,nn,sum,check,choice;
 			Ini_Lcd();	
 			Disp(1,0,8,"演奏大师");
@@ -313,18 +355,23 @@ void main()
 			Disp(3,0,8,"同桌的你");
 			key=00;
 		    KeyIO=0xf0;
-      while (1)
-							{
-								if ((KeyIO&0xf0)!=0xf0)
-								{
-									Delay_xMs(100);
-									if ((KeyIO&0xf0)!=0xf0)
-									{
-										key=scankey();	
-										break;
-									}
-								}
-							}
+            while (1)
+			{
+				if ((KeyIO&0xf0)!=0xf0)
+					{
+					Delay_xMs(100);
+					if ((KeyIO&0xf0)!=0xf0)
+					{
+						key=scankey();	
+						break;
+						}
+					}
+			}
+            if (key==43)
+            {
+            TR0=0;
+            break;
+            }
 				switch(key){
 					case 11:
 						flag2=0;
@@ -340,64 +387,120 @@ void main()
 			if(flag2==0){
 				Ini_Lcd();
 			for(i=1;;i++){
+				char tune=0;
 				sum++;
 				flag=1;
 				if(choice==1)
 					mm=music4[i][0];
 				else if(choice==2)
 					mm=music5[i][0];
-				if(mm==13) Disp(2,0,8,"弹奏：1");
-				else if(mm==15) Disp(2,0,8,"弹奏：2");
-				else if(mm==17) Disp(2,0,8,"弹奏：3");
-				else if(mm==18) Disp(2,0,8,"弹奏：4");
-				else if(mm==20) Disp(2,0,8,"弹奏：5");
-				else if(mm==22) Disp(2,0,8,"弹奏：6");
-				else if(mm==24) Disp(2,0,8,"弹奏：7");
+				if(mm==13) Disp(2,0,9,"弹奏：1 M");
+				else if(mm==15) Disp(2,0,9,"弹奏：2 M");
+				else if(mm==17) Disp(2,0,9,"弹奏：3 M");
+				else if(mm==18) Disp(2,0,9,"弹奏：4 M");
+				else if(mm==20) Disp(2,0,9,"弹奏：5 M");
+				else if(mm==22) Disp(2,0,9,"弹奏：6 M");
+				else if(mm==24) Disp(2,0,9,"弹奏：7 M");
+				
+				else if(mm==1) Disp(2,0,9,"弹奏：1 L");
+				else if(mm==3) Disp(2,0,9,"弹奏：2 L");
+				else if(mm==5) Disp(2,0,9,"弹奏：3 L");
+				else if(mm==6) Disp(2,0,9,"弹奏：4 L");
+				else if(mm==8) Disp(2,0,9,"弹奏：5 L");
+				else if(mm==10) Disp(2,0,9,"弹奏：6 L");
+				else if(mm==12) Disp(2,0,9,"弹奏：7 L");
+				
+				else if(mm==25) Disp(2,0,9,"弹奏：1 H");
+				else if(mm==27) Disp(2,0,9,"弹奏：2 H");
+				else if(mm==29) Disp(2,0,9,"弹奏：3 H");
+				else if(mm==30) Disp(2,0,9,"弹奏：4 H");
+				else if(mm==32) Disp(2,0,9,"弹奏：5 H");
+				else if(mm==34) Disp(2,0,9,"弹奏：6 H");
+				else if(mm==36) Disp(2,0,9,"弹奏：7 H");
+				
 				else if(mm==0) {
+                    TR0=0;
 					flag2=1;break;
 				}
-			        while(flag==1){
+				//++++++++++++++++++++++++++++++++++++++++++++++++
+					while(flag==1){
+				    key_tune=00;
+					KeyIO=0xf0;
+					if ((P1&0xf0)!=0xf0)
+					{
+						Delay_xMs(50);
+					 	if ((P1&0xf0)!=0xf0)
+					 	key_tune=scankey();
+					}
+					if (OPT_CHECK!=0xff)
+						{
+							switch(key_tune)
+							{
+							case 41:
+							Disp(3,4,1,"H");
+							tune=1;
+							break;
+							case 42:
+							Disp(3,4,1,"L");
+							tune=-1;
+							break;
+                            default:
+                            Disp(3,4,1,"M");
+							tune=0;
+							break;
+							}	
+						 }
+                    if (key_tune==44)
+                    {
+                    TR0=0;
+                    break;
+                    }
+                    
+				
+				//++++++++++++++++++++++++++++++++++++++++++++++++
+				
+			       // while(flag==1){
 				if(!(OPT_CHECK&0x01))
 				 {
 				    Disp(3,0,8,"音调：1");
-					  nn=13;flag=0;
-					 m=13,n=8;
+					  nn=13+12*tune;flag=0;
+					 m=13+12*tune,n=8;
 				 }
 				 else if(!(OPT_CHECK&0x02))
 				 {
 				   Disp(3,0,8,"音调：2");
-					 nn=15;flag=0;
-					 m=15,n=8;
+					 nn=15+12*tune;flag=0;
+					 m=15+12*tune,n=8;
 				 }
 				 else if(!(OPT_CHECK&0x04))
 				 {
 				   Disp(3,0,8,"音调：3");
-					 nn=17;flag=0;
-					 m=17,n=8;
+					 nn=17+12*tune;flag=0;
+					 m=17+12*tune,n=8;
 				 }
 				 else if(!(OPT_CHECK&0x08))
 				 {
 				   Disp(3,0,8,"音调：4");
-					 nn=18;flag=0;
-					 m=18,n=8;
+					 nn=18+12*tune;flag=0;
+					 m=18+12*tune,n=8;
 				 }
 				 else if(!(OPT_CHECK&0x10))
 				 {
 				  Disp(3,0,8,"音调：5");
-					 nn=20;flag=0;
-					 m=20,n=8;
+					 nn=20+12*tune;flag=0;
+					 m=20+12*tune,n=8;
 				 }
 				 else if(!(OPT_CHECK&0x20))
 				 {
 				   Disp(3,0,8,"音调：6");
-					 nn=22;flag=0;
-					 m=22,n=8;
+					 nn=22+12*tune;flag=0;
+					 m=22+12*tune,n=8;
 				 }
 				 else if(!(OPT_CHECK&0x40))
 				 {
 				   Disp(3,0,8,"音调：7");
-					 nn=24;flag=0;
-					 m=24,n=8;
+					 nn=24+12*tune;flag=0;
+					 m=24+12*tune,n=8;
 				 }
 				 else{
 				   nn=0;m=0,n=2;
@@ -408,6 +511,11 @@ void main()
         			 else
         			 {TR0=1;delay(n);}
 			 }
+             if (key_tune==44)
+             {
+             TR0=0;
+             break;
+             }
 			 Delay_xMs(2000);
 			 if(mm==nn) check++;
 			 //if(i==42) flag2=1;
@@ -417,17 +525,24 @@ void main()
 			else if((sum-check>1)&&(sum-check<=5)) Disp(4,0,4,"不错");
 			else if((sum-check>5)&&(sum-check<=20)) Disp(4,0,4,"还行");
 			else if(sum-check>20) Disp(4,0,4,"失败");
-      while (1)
+			check=0;
+			sum=0;
+            Disp(1,0,10,"任意键返回");
+            delay(200);
+            KeyIO=0xf0;
+            while (1)
 			{
 				if ((KeyIO&0xf0)!=0xf0)
+                {
 				Delay_xMs(100);
-				if((KeyIO&0xf0)!=0xf0){
-				key=scankey();
-        if (key==43)
-				break; }
+				if((KeyIO&0xf0)!=0xf0)
+				break; 
+                }
 			} 
-      break;
-		}		 
+      
+		}
+        }		
+      	break;	 
 			default: break;
 		}
 	}
@@ -693,6 +808,7 @@ void play_start(uchar (*music)[2])
         }
         i++;
 	}
+    TR0=0;
 }
 uchar scankey(void)//矩阵键盘翻转扫描
 {
