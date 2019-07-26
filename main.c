@@ -6,6 +6,10 @@
 void play_start(uchar (*music)[2]);
 void show_score(uchar (*music)[2]);
 void delay(uchar p);
+unsigned char win_xo(void);
+unsigned char win_1(unsigned char x, unsigned char y);
+unsigned char win_2(unsigned char x, unsigned char y);
+
 uchar m,n; 
 
 char dot_h=0x2e;
@@ -18,14 +22,13 @@ unsigned char Count;
 uchar key_1,key_tune;
 void main()
 { 
-	uchar i=0;
+	uchar i=0,j=0;
 	
 	uchar clong,hight;
 	hight=32;
 	clong=16;
 	Ini_Lcd();//Òº¾§³õÊ¼»¯×Ó³ÌÐò
-	WRGDRAM(0x80,clong,hight,gImage_1);//¿ª»úÍ¼Æ¬
-	
+	WRGDRAM(0x80,clong,hight,gImage_1);//¿ª»úÍ¼Æ¬	
 	P4M1=0x00;
 	P4M0=0x00;
 	Ini_Lcd();//Òº¾§³õÊ¼»¯×Ó³ÌÐò
@@ -57,6 +60,7 @@ void main()
 				Delay_xMs(100);
 				if((KeyIO&0xf0)!=0xf0){
 				key_1=scankey();
+                if (key_1>=11&&key_1<=13)
 				break; }
 			}
 
@@ -87,6 +91,7 @@ void main()
 								if ((KeyIO&0xf0)!=0xf0)
 								{
 								key=scankey();
+                                if (key==11||key==12||key==14||key==43)
 								break;	
 								}
 							}	
@@ -128,7 +133,8 @@ void main()
 									Delay_xMs(100);
 									if ((KeyIO&0xf0)!=0xf0)
 									{
-										key=scankey();	
+										key=scankey();
+                                        if (key==11||key==12||key==13||key==43)	
 										break;
 									}
 								}
@@ -215,7 +221,7 @@ void main()
 						case 13:
                             if (music6[1][0]==0)
                             {
-                            Disp(3,0,8,"ÎÞÒôÆµ  ");
+                            Disp(3,0,6,"ÎÞÒôÆµ");
                             break;
 							}
                             //show_score(music0);
@@ -345,209 +351,647 @@ void main()
 			  	break;
 			}
        case 13:
-		{   
-            while(1)
-            {
-			char flag2=1,flag=1,mm,nn,sum,check,choice;
-			Ini_Lcd();	
-			Disp(1,0,8,"ÑÝ×à´óÊ¦");
-			Disp(2,0,6,"Ð¡ÐÇÐÇ");
-			Disp(3,0,8,"Í¬×ÀµÄÄã");
-			key=00;
-		    KeyIO=0xf0;
+		{  
+            char key_game;
             while (1)
-			{
-				if ((KeyIO&0xf0)!=0xf0)
-					{
-					Delay_xMs(100);
-					if ((KeyIO&0xf0)!=0xf0)
-					{
-						key=scankey();	
-						if (key==43||key==11||key==12)
-						break;
-						}
-					}
-			}
-            if (key==43)
             {
-            TR0=0;
+                key_game=00;
+                Ini_Lcd();
+                Disp(1,0,10,"1:½Ú×à´óÊ¦");
+                Disp(2,0,8,"2:sudoku");
+                Disp(3,0,10,"3:È¦È¦²æ²æ");
+                Disp(4,0,8,"15£ºÍË³ö");
+                while (1)
+                {
+                    KeyIO=0xf0;
+                    if ((KeyIO&0xf0)!=0xf0)
+                    {
+                        Delay_xMs(100);
+                        if ((KeyIO&0xf0)!=0xf0)
+                        {
+                            key_game=scankey();
+                            if (key_game==11||key_game==12||key_game==13||key_game==43)
+                            break;
+                        }
+                    }
+                }
+                if (key_game==43)
+                    break;
+                switch (key_game)
+                {
+                case 11:
+                {
+                while(1)
+                {
+    			char flag2=1,flag=1,mm,nn,sum,check,choice;
+    			Ini_Lcd();	
+    			Disp(1,0,8,"ÑÝ×à´óÊ¦");
+    			Disp(2,0,8,"1:Ð¡ÐÇÐÇ");
+    			Disp(3,0,10,"2:Í¬×ÀµÄÄã");
+                Disp(4,0,8,"15£ºÍË³ö");
+    			key=00;
+    		    KeyIO=0xf0;
+                while (1)
+    			{
+    				if ((KeyIO&0xf0)!=0xf0)
+    					{
+    					Delay_xMs(100);
+    					if ((KeyIO&0xf0)!=0xf0)
+    					{
+    						key=scankey();	
+    						if (key==43||key==11||key==12)
+    						break;
+    						}
+    					}
+    			}
+                if (key==43)
+                {
+                TR0=0;
+                break;
+                }
+    				switch(key){
+    					case 11:
+    						flag2=0;
+    						choice=1;
+    					  break;	
+    					case 12:
+    						flag2=0;
+    						choice=2;
+    					  break;
+    					default: break;
+    				}
+    			sum=0;
+    			if(flag2==0){
+    				Ini_Lcd();
+    			for(i=1;;i++)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               {
+    				char tune=0;
+    				sum++;
+    				flag=1;
+    				if(choice==1)
+    					mm=music4[i][0];
+    				else if(choice==2)
+    					mm=music5[i][0];
+    				if(mm==13) Disp(2,0,9,"µ¯×à£º1 M");
+    				else if(mm==15) Disp(2,0,9,"µ¯×à£º2 M");
+    				else if(mm==17) Disp(2,0,9,"µ¯×à£º3 M");
+    				else if(mm==18) Disp(2,0,9,"µ¯×à£º4 M");
+    				else if(mm==20) Disp(2,0,9,"µ¯×à£º5 M");
+    				else if(mm==22) Disp(2,0,9,"µ¯×à£º6 M");
+    				else if(mm==24) Disp(2,0,9,"µ¯×à£º7 M");
+    				
+    				else if(mm==1) Disp(2,0,9,"µ¯×à£º1 L");
+    				else if(mm==3) Disp(2,0,9,"µ¯×à£º2 L");
+    				else if(mm==5) Disp(2,0,9,"µ¯×à£º3 L");
+    				else if(mm==6) Disp(2,0,9,"µ¯×à£º4 L");
+    				else if(mm==8) Disp(2,0,9,"µ¯×à£º5 L");
+    				else if(mm==10) Disp(2,0,9,"µ¯×à£º6 L");
+    				else if(mm==12) Disp(2,0,9,"µ¯×à£º7 L");
+    				
+    				else if(mm==25) Disp(2,0,9,"µ¯×à£º1 H");
+    				else if(mm==27) Disp(2,0,9,"µ¯×à£º2 H");
+    				else if(mm==29) Disp(2,0,9,"µ¯×à£º3 H");
+    				else if(mm==30) Disp(2,0,9,"µ¯×à£º4 H");
+    				else if(mm==32) Disp(2,0,9,"µ¯×à£º5 H");
+    				else if(mm==34) Disp(2,0,9,"µ¯×à£º6 H");
+    				else if(mm==36) Disp(2,0,9,"µ¯×à£º7 H");
+    				
+    				else if(mm==0) {
+                        TR0=0;
+    					flag2=1;break;
+    				}
+    				//++++++++++++++++++++++++++++++++++++++++++++++++
+    					while(flag==1){
+    				    key_tune=00;
+    					KeyIO=0xf0;
+    					if ((P1&0xf0)!=0xf0)
+    					{
+    						Delay_xMs(50);
+    					 	if ((P1&0xf0)!=0xf0)
+    					 	key_tune=scankey();
+    					}
+    					if (OPT_CHECK!=0xff)
+    						{
+    							switch(key_tune)
+    							{
+    							case 41:
+    							Disp(3,4,1,"H");
+    							tune=1;
+    							break;
+    							case 42:
+    							Disp(3,4,1,"L");
+    							tune=-1;
+    							break;
+                                default:
+                                Disp(3,4,1,"M");
+    							tune=0;
+    							break;
+    							}	
+    						 }
+                        if (key_tune==44)
+                        {
+                        TR0=0;
+                        break;
+                        }
+                        
+    				
+    				//++++++++++++++++++++++++++++++++++++++++++++++++
+    				
+    			       // while(flag==1){
+    				if(!(OPT_CHECK&0x01))
+    				 {
+    				    Disp(3,0,8,"Òôµ÷£º1");
+    					  nn=13+12*tune;flag=0;
+    					 m=13+12*tune,n=8;
+    				 }
+    				 else if(!(OPT_CHECK&0x02))
+    				 {
+    				   Disp(3,0,8,"Òôµ÷£º2");
+    					 nn=15+12*tune;flag=0;
+    					 m=15+12*tune,n=8;
+    				 }
+    				 else if(!(OPT_CHECK&0x04))
+    				 {
+    				   Disp(3,0,8,"Òôµ÷£º3");
+    					 nn=17+12*tune;flag=0;
+    					 m=17+12*tune,n=8;
+    				 }
+    				 else if(!(OPT_CHECK&0x08))
+    				 {
+    				   Disp(3,0,8,"Òôµ÷£º4");
+    					 nn=18+12*tune;flag=0;
+    					 m=18+12*tune,n=8;
+    				 }
+    				 else if(!(OPT_CHECK&0x10))
+    				 {
+    				  Disp(3,0,8,"Òôµ÷£º5");
+    					 nn=20+12*tune;flag=0;
+    					 m=20+12*tune,n=8;
+    				 }
+    				 else if(!(OPT_CHECK&0x20))
+    				 {
+    				   Disp(3,0,8,"Òôµ÷£º6");
+    					 nn=22+12*tune;flag=0;
+    					 m=22+12*tune,n=8;
+    				 }
+    				 else if(!(OPT_CHECK&0x40))
+    				 {
+    				   Disp(3,0,8,"Òôµ÷£º7");
+    					 nn=24+12*tune;flag=0;
+    					 m=24+12*tune,n=8;
+    				 }
+    				 else{
+    				   nn=0;m=0,n=2;
+    				 	 Disp(3,0,8,"Òôµ÷£º0");
+    				 }
+    				 if(m==0x00)
+            			 {TR0=0;delay(n);} 
+            			 else
+            			 {TR0=1;delay(n);}
+    			 }
+                 if (key_tune==44)
+                 {
+                 TR0=0;
+                 break;
+                 }
+    			 Delay_xMs(2000);
+    			 if(mm==nn) check++;
+    			 //if(i==42) flag2=1;
+    			}
+    		  }
+    			if(sum-check<=1) Disp(4,0,4,"ÍêÃÀ");
+    			else if((sum-check>1)&&(sum-check<=5)) Disp(4,0,4,"²»´í");
+    			else if((sum-check>5)&&(sum-check<=20)) Disp(4,0,4,"»¹ÐÐ");
+    			else if(sum-check>20) Disp(4,0,4,"Ê§°Ü");
+    			check=0;
+    			sum=0;
+                Disp(1,0,10,"ÈÎÒâ¼ü·µ»Ø");
+                delay(200);
+                KeyIO=0xf0;
+                while (1)
+    			{
+    				if ((KeyIO&0xf0)!=0xf0)
+                    {
+    				Delay_xMs(100);
+    				if((KeyIO&0xf0)!=0xf0)
+    				break; 
+                    }
+    			} 
+          
+    		}
             break;
             }
-				switch(key){
-					case 11:
-						flag2=0;
-						choice=1;
-					  break;	
-					case 12:
-						flag2=0;
-						choice=2;
-					  break;
-					default: break;
-				}
-			sum=0;
-			if(flag2==0){
-				Ini_Lcd();
-			for(i=1;;i++){
-				char tune=0;
-				sum++;
-				flag=1;
-				if(choice==1)
-					mm=music4[i][0];
-				else if(choice==2)
-					mm=music5[i][0];
-				if(mm==13) Disp(2,0,9,"µ¯×à£º1 M");
-				else if(mm==15) Disp(2,0,9,"µ¯×à£º2 M");
-				else if(mm==17) Disp(2,0,9,"µ¯×à£º3 M");
-				else if(mm==18) Disp(2,0,9,"µ¯×à£º4 M");
-				else if(mm==20) Disp(2,0,9,"µ¯×à£º5 M");
-				else if(mm==22) Disp(2,0,9,"µ¯×à£º6 M");
-				else if(mm==24) Disp(2,0,9,"µ¯×à£º7 M");
-				
-				else if(mm==1) Disp(2,0,9,"µ¯×à£º1 L");
-				else if(mm==3) Disp(2,0,9,"µ¯×à£º2 L");
-				else if(mm==5) Disp(2,0,9,"µ¯×à£º3 L");
-				else if(mm==6) Disp(2,0,9,"µ¯×à£º4 L");
-				else if(mm==8) Disp(2,0,9,"µ¯×à£º5 L");
-				else if(mm==10) Disp(2,0,9,"µ¯×à£º6 L");
-				else if(mm==12) Disp(2,0,9,"µ¯×à£º7 L");
-				
-				else if(mm==25) Disp(2,0,9,"µ¯×à£º1 H");
-				else if(mm==27) Disp(2,0,9,"µ¯×à£º2 H");
-				else if(mm==29) Disp(2,0,9,"µ¯×à£º3 H");
-				else if(mm==30) Disp(2,0,9,"µ¯×à£º4 H");
-				else if(mm==32) Disp(2,0,9,"µ¯×à£º5 H");
-				else if(mm==34) Disp(2,0,9,"µ¯×à£º6 H");
-				else if(mm==36) Disp(2,0,9,"µ¯×à£º7 H");
-				
-				else if(mm==0) {
-                    TR0=0;
-					flag2=1;break;
-				}
-				//++++++++++++++++++++++++++++++++++++++++++++++++
-					while(flag==1){
-				    key_tune=00;
-					KeyIO=0xf0;
-					if ((P1&0xf0)!=0xf0)
-					{
-						Delay_xMs(50);
-					 	if ((P1&0xf0)!=0xf0)
-					 	key_tune=scankey();
-					}
-					if (OPT_CHECK!=0xff)
-						{
-							switch(key_tune)
-							{
-							case 41:
-							Disp(3,4,1,"H");
-							tune=1;
-							break;
-							case 42:
-							Disp(3,4,1,"L");
-							tune=-1;
-							break;
-                            default:
-                            Disp(3,4,1,"M");
-							tune=0;
-							break;
-							}	
-						 }
-                    if (key_tune==44)
+            case 12:
+            {
+            for (i=0;i<4;i++)
+                   {
+                       for (j=0;j<4;j++)
+                       num1[i][j]=num1_memo[i][j];
+                   }
+                   position[0]=1+0x30;
+                   position[1]=1+0x30;
+            Ini_Lcd();//Òº¾§³õÊ¼»¯×Ó³ÌÐò
+            Disp(1,5,6,"x Î»ÖÃ");
+            Disp(3,5,6,"y Î»ÖÃ");
+            for (i=0;i<4;i++)
+                {
+                     for (j=0;j<4;j++)
+                     {
+                     if (num1[i][j]-0x30)
+                     Disp(i+1,j,1,*(num1+i)+j);
+                     }     
+                } 
+            while (1)
+            {   
+                char i,j;
+                bit flag=1;
+                char key_num; 
+                
+                Disp(2,5,1,position);
+                Disp(4,5,1,position+1);
+                key_num=00;
+                while (1)
+                {
+                if ((KeyIO&0xf0)!=0xf0)
+                Delay_xMs(100);
+                if ((KeyIO&0xf0)!=0xf0)
+                {
+                   key_num=scankey();
+                   if ((key_num>=11&&key_num<=14&&(!num1_lock[position[1]-1-0x30][position[0]-1-0x30]))||(key_num>=21&&key_num<=24)||key_num==43)
+                   {
+                   KeyIO=0xf0;
+                   while (KeyIO!=0xf0);
+                   break;
+                   }
+                }
+                }
+                if (key_num==43)
+                break;
+                switch (key_num)
+                {
+                case 11:
+                num1[position[1]-1-0x30][position[0]-1-0x30]=1+0x30;
+                break;
+                case 12:
+                num1[position[1]-1-0x30][position[0]-1-0x30]=2+0x30;
+                break;
+                case 13:
+                num1[position[1]-1-0x30][position[0]-1-0x30]=3+0x30;
+                break;
+                case 14:
+                num1[position[1]-1-0x30][position[0]-1-0x30]=4+0x30;
+                break;
+                case 21:
+                if (position[1]>1+0x30)
+                position[1]=position[1]-1;
+                break;
+                case 22:
+                if (position[1]<4+0x30)
+                position[1]=position[1]+1;
+                break;
+                case 23:
+                if (position[0]>1+0x30)
+                position[0]= position[0]-1;
+                break;
+                case 24:
+                if (position[0]<4+0x30)
+                position[0]= position[0]+1;
+                break;
+                }
+                for (i=0;i<4;i++)
+                {
+                     for (j=0;j<4;j++)
+                     {
+                     if (num1[i][j]-0x30)
+                     Disp(i+1,j,1,*(num1+i)+j);
+                     }     
+                }
+                for (i=0;i<4;i++)
+                {
+                    for (j=0;j<4;j++)
+                    if (num1[i][j]!=num1_right[i][j])
+                    flag=0;
+                } 
+                if (flag)
+                {
+                Ini_Lcd();//Òº¾§³õÊ¼»¯×Ó³ÌÐò
+                Disp(1,0,10,"excellent!") ;
+                Disp(4,0,10,"ÈÎÒâ¼ü·µ»Ø");
+                start=1;
+                play_start(music0);
+                start=0;
+                delay(100);
+                KeyIO=0xf0;
+                while (1)
+    			{
+    				if ((KeyIO&0xf0)!=0xf0)
                     {
-                    TR0=0;
+    				Delay_xMs(100);
+    				if((KeyIO&0xf0)!=0xf0)
+    				break; 
+                    }
+    			}
+                    
+                   break;
+                }
+            }
+                break;
+            }
+            case 13:
+            {   
+                char win=0,count=0,difficulty=0,ahead=0,key_diffi=00;
+                while (1)
+                {
+                ahead=0;
+                win=0;
+                count=0;
+                key_diffi=00;
+                //Ñ¡ÔñÄÑ¶È
+                Ini_Lcd();
+                Disp(1,0,12,"1:²»¿ÉÕ½Ê¤µÄ");
+                Disp(2,0,6,"2:´óÊ¦");
+                Disp(3,0,6,"3:Ð¡°×");
+                Disp(4,0,8,"15£ºÍË³ö");
+                while (1)
+                {
+                    KeyIO=0xf0;
+                    if ((KeyIO&0xf0)!=0xf0)
+                    {
+                        Delay_xMs(100);
+                        if ((KeyIO&0xf0)!=0xf0)
+                        {
+                        key_diffi=scankey();
+                        if ((key_diffi>=11&&key_diffi<=13)||key_diffi==43)
+                            {
+                            KeyIO=0xf0;
+                            while (KeyIO!=0xf0);
+                            break;
+                            }
+                        }
+                    }
+               }
+               if (key_diffi==43)
+               break;
+               switch (key_diffi)
+               {
+                   case 11:
+                   difficulty=3;
+                   break;
+                   case 12:
+                   difficulty=2;
+                   break;
+                   case 13:
+                   difficulty=1;
+                   break;
+                }
+                while(1)
+                {
+                    Ini_Lcd();//Ë¢ÐÂÏÔÊ¾
+                    for (i=0;i<3;i++)
+                    {
+                        for (j=0;j<3;j++)
+                        {
+                        if (xo[i][j])
+                        switch (xo[i][j])
+                        {
+                        case 1:
+                        Disp(i+1,j,1,"X");
+                        break;
+                        case 2:
+                        Disp(i+1,j,1,"O");
+                        break;
+                        }
+                        }     
+                    }
+                    Disp(1,5,6,"x Î»ÖÃ");
+                    Disp(2,5,1,position_xo);
+                    Disp(3,5,6,"y Î»ÖÃ");
+                    Disp(4,5,1,position_xo+1);
+                    while (1)
+                    {
+                        bit flag_1=0; 
+                        //determine the position of player 1
+                        if (difficulty==3||(difficulty==2&&ahead==1)||(difficulty==1&&ahead==1))
+                        {
+                        for (i=0;i<3;i++)
+                        {
+                            for (j=0;j<3;j++)
+                            {
+                                if ((!xo[i][j])&&win_1(i,j))
+                                {
+                                xo[i][j]=1;
+                                flag_1=1;
+                                break;
+                                }
+                            }
+                            if (flag_1)
+                            break;
+                        }
+                        if (!flag_1)
+                        {
+                            for (i=0;i<3;i++)
+                            {
+                                for (j=0;j<3;j++)
+                                {
+                                    if ((!xo[i][j])&&win_2(i,j))
+                                    {
+                                        xo[i][j]=1;
+                                        flag_1=1;
+                                        break;
+                                    }
+                                }
+                                if (flag_1)
+                                break;
+                            }
+                        }
+                        if ((!flag_1)&&difficulty!=1)
+                        {
+                            if (!xo[1][1])
+                            xo[1][1]=1;
+                            else if (!xo[0][0])
+                            xo[0][0]=1;
+                            else if (!xo[2][0])
+                            xo[2][0]=1;
+                            else if (!xo[0][2])
+                            xo[0][2]=1;
+                            else if (!xo[2][0])
+                            xo[2][0]=1;
+                            else if (!xo[0][1])
+                            xo[0][1]=1;
+                            else if (!xo[1][0])
+                            xo[1][0]=1;
+                            else if (!xo[1][2])
+                            xo[1][2]=1;
+                            else
+                            xo[2][1]=1;
+                        }
+                        if ((!flag_1)&&difficulty==1)
+                        {
+                            
+                            if (!xo[0][1])
+                            xo[0][1]=1;
+                            else if (!xo[1][0])
+                            xo[1][0]=1;
+                            else if (!xo[1][2])
+                            xo[1][2]=1;
+                            else if (!xo[2][1])
+                            xo[2][1]=1;
+                            else if (!xo[0][0])
+                            xo[0][0]=1;
+                            else if (!xo[2][0])
+                            xo[2][0]=1;
+                            else if (!xo[0][2])
+                            xo[0][2]=1;
+                            else if (!xo[2][0])
+                            xo[2][0]=1;
+                            else if (!xo[1][1])
+                            xo[1][1]=1;
+                        }
+                        for (i=0;i<3;i++)
+                        {
+                            for (j=0;j<3;j++)
+                            {
+                            if (xo[i][j])
+                            switch (xo[i][j])
+                            {
+                            case 1:
+                            Disp(i+1,j,1,"X");
+                            break;
+                            case 2:
+                            Disp(i+1,j,1,"O");
+                            break;
+                            }
+                            }     
+                        }
+                        count++;
+                        }
+                        win=win_xo();
+                        if (win)
+                        break;
+                        if (count==9)
+                        {
+                        win=3;
+                        break;
+                        }
+                        //determine the position of player 2
+                        while (1)
+                        {
+                            unsigned char key_xo=00;
+                            while (1)
+                            {
+                                KeyIO=0xf0;
+                                if ((KeyIO&0xf0)!=0xf0)
+                                {
+                                    Delay_xMs(100);
+                                    if ((KeyIO&0xf0)!=0xf0)
+                                    {
+                                        key_xo=scankey();
+                                        if ((key_xo>=11&&key_xo<=14)||key_xo==21||key_xo==43)
+                                        break;
+                                    }
+                                }
+                            }
+                            KeyIO=0xf0;
+                            while (KeyIO!=0xf0);
+                            if (key_xo==43)
+                            {
+                            win=4;
+                            break;
+                            }
+                            if (key_xo>=11&&key_xo<=14)
+                            {
+                                switch (key_xo)
+                                {
+                                case 11:
+                                if (position_xo[1]>1+0x30)
+                                position_xo[1]=position_xo[1]-1;
+                                break;
+                                case 12:
+                                if (position_xo[1]<3+0x30)
+                                position_xo[1]=position_xo[1]+1;
+                                break;
+                                case 13:
+                                if (position_xo[0]>1+0x30)
+                                position_xo[0]= position_xo[0]-1;
+                                break;
+                                case 14:
+                                if (position_xo[0]<3+0x30)
+                                position_xo[0]= position_xo[0]+1;
+                                break;
+                                }
+                                Disp(2,5,1,position_xo);
+                                Disp(4,5,1,position_xo+1);
+                            }
+                            else
+                            {
+                                if (!xo[position_xo[1]-1-0x30][position_xo[0]-1-0x30])
+                                {
+                                    xo[position_xo[1]-1-0x30][position_xo[0]-1-0x30]=2;
+                                    Disp(position_xo[1]-0x30,position_xo[0]-1-0x30,1,"O");
+                                    count++;
+                                    break;
+                                }
+                            } 
+                        }
+                        ahead=1;
+                        if (win==4)
+                        break;
+                        win=win_xo();
+                        if (win)
+                        break;
+                        if (count==9)
+                        {
+                        win=3;
+                        break;
+                        } 
+                    }
+                    for (i=0;i<3;i++)
+                    {
+                        for (j=0;j<3;j++)
+                        xo[i][j]=0;
+                    }
+                    position_xo[0]=1+0x30;
+                    position_xo[1]=1+0x30;
+                    Ini_Lcd();
+                    if (win==4)
+                    break;
+                    switch (win)
+                    {
+                    case 1:
+                    Disp(1,0,8,"you lost");
+                    break;
+                    case 2:
+                    Disp(1,0,7,"you win");
+                    break;
+                    case 3:
+                    Disp(1,0,5,"equal");
                     break;
                     }
-                    
-				
-				//++++++++++++++++++++++++++++++++++++++++++++++++
-				
-			       // while(flag==1){
-				if(!(OPT_CHECK&0x01))
-				 {
-				    Disp(3,0,8,"Òôµ÷£º1");
-					  nn=13+12*tune;flag=0;
-					 m=13+12*tune,n=8;
-				 }
-				 else if(!(OPT_CHECK&0x02))
-				 {
-				   Disp(3,0,8,"Òôµ÷£º2");
-					 nn=15+12*tune;flag=0;
-					 m=15+12*tune,n=8;
-				 }
-				 else if(!(OPT_CHECK&0x04))
-				 {
-				   Disp(3,0,8,"Òôµ÷£º3");
-					 nn=17+12*tune;flag=0;
-					 m=17+12*tune,n=8;
-				 }
-				 else if(!(OPT_CHECK&0x08))
-				 {
-				   Disp(3,0,8,"Òôµ÷£º4");
-					 nn=18+12*tune;flag=0;
-					 m=18+12*tune,n=8;
-				 }
-				 else if(!(OPT_CHECK&0x10))
-				 {
-				  Disp(3,0,8,"Òôµ÷£º5");
-					 nn=20+12*tune;flag=0;
-					 m=20+12*tune,n=8;
-				 }
-				 else if(!(OPT_CHECK&0x20))
-				 {
-				   Disp(3,0,8,"Òôµ÷£º6");
-					 nn=22+12*tune;flag=0;
-					 m=22+12*tune,n=8;
-				 }
-				 else if(!(OPT_CHECK&0x40))
-				 {
-				   Disp(3,0,8,"Òôµ÷£º7");
-					 nn=24+12*tune;flag=0;
-					 m=24+12*tune,n=8;
-				 }
-				 else{
-				   nn=0;m=0,n=2;
-				 	 Disp(3,0,8,"Òôµ÷£º0");
-				 }
-				 if(m==0x00)
-        			 {TR0=0;delay(n);} 
-        			 else
-        			 {TR0=1;delay(n);}
-			 }
-             if (key_tune==44)
-             {
-             TR0=0;
-             break;
-             }
-			 Delay_xMs(2000);
-			 if(mm==nn) check++;
-			 //if(i==42) flag2=1;
-			}
-		  }
-			if(sum-check<=1) Disp(4,0,4,"ÍêÃÀ");
-			else if((sum-check>1)&&(sum-check<=5)) Disp(4,0,4,"²»´í");
-			else if((sum-check>5)&&(sum-check<=20)) Disp(4,0,4,"»¹ÐÐ");
-			else if(sum-check>20) Disp(4,0,4,"Ê§°Ü");
-			check=0;
-			sum=0;
-            Disp(1,0,10,"ÈÎÒâ¼ü·µ»Ø");
-            delay(200);
-            KeyIO=0xf0;
-            while (1)
-			{
-				if ((KeyIO&0xf0)!=0xf0)
-                {
-				Delay_xMs(100);
-				if((KeyIO&0xf0)!=0xf0)
-				break; 
+                    Disp(4,0,10,"ÈÎÒâ¼ü·µ»Ø");
+                    KeyIO=0xf0;
+                    while (1)
+        			{
+        				if ((KeyIO&0xf0)!=0xf0)
+                        {
+        				Delay_xMs(100);
+        				if((KeyIO&0xf0)!=0xf0)
+        				break; 
+                        }
+        			}
+                    break;
+                    }
                 }
-			} 
-      
-		}
+                break;
+            }
+
+            default: break;
+            }   
         }		
       	break;	 
-			default: break;
+		default: break;
 		}
-	}
-}
+	}   //switch(key_1)
+    }   //while(1)
+}   //void main
 
 /*****************¼ì²â¿ØÖÆ¶Ë¿ÚµÄ×´Ì¬*****************/
 uchar ctrl_port_check(void)
@@ -846,3 +1290,64 @@ uchar scankey(void)//¾ØÕó¼üÅÌ·­×ªÉ¨Ãè
 }
 
 //°´ÈÎÒâ¼üÍË³ö
+
+unsigned char win_xo(void)
+{
+    if (xo[1][1]==1)
+    {
+    if (xo[0][0]==1&&xo[2][2]==1)
+    return 1;
+    if (xo[2][0]==1&&xo[0][2]==1)
+    return 1;
+    if (xo[0][1]==1&&xo[2][1]==1)
+    return 1;
+    if (xo[1][0]==1&&xo[1][2]==1)
+    return 1;
+    }
+    if (xo[1][1]==2)
+    {
+    if (xo[0][0]==2&&xo[2][2]==2)
+    return 2;
+    if (xo[2][0]==2&&xo[0][2]==2)
+    return 2;
+    if (xo[0][1]==2&&xo[2][1]==2)
+    return 2;
+    if (xo[1][0]==2&&xo[1][2]==2)
+    return 2;
+    }
+    if (xo[0][0]==1&&xo[0][1]==1&&xo[0][2]==1)
+    return 1;
+    if (xo[2][0]==1&&xo[2][1]==1&&xo[2][2]==1)
+    return 1;
+    if (xo[0][0]==1&&xo[1][0]==1&&xo[2][0]==1)
+    return 1;
+    if (xo[0][2]==1&&xo[1][2]==1&&xo[2][2]==1)
+    return 1;
+    if (xo[0][0]==2&&xo[0][1]==2&&xo[0][2]==2)
+    return 2;
+    if (xo[2][0]==2&&xo[2][1]==2&&xo[2][2]==2)
+    return 2;
+    if (xo[0][0]==2&&xo[1][0]==2&&xo[2][0]==2)
+    return 2;
+    if (xo[0][2]==2&&xo[1][2]==2&&xo[2][2]==2)
+    return 2;
+    return 0;
+}
+
+unsigned char win_1(unsigned char x, unsigned char y)
+{
+    unsigned char win;
+    xo[x][y]=1;
+    win=win_xo();
+    xo[x][y]=0;
+    return win;
+}
+
+unsigned char win_2(unsigned char x, unsigned char y)
+{
+    unsigned char win;
+    xo[x][y]=2;
+    win=win_xo();
+    xo[x][y]=0;
+    return win;
+}
