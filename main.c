@@ -23,7 +23,7 @@ uchar key_1,key_tune;
 void main()
 { 
 	uchar i=0,j=0;
-	
+	uchar i_cide=0,key_cide;
 	uchar clong,hight;
 	hight=32;
 	clong=16;
@@ -42,7 +42,112 @@ void main()
 	Disp(4,0,16,"****************");//显示数据到LCD12864子程序
 	play_start(music0);		
 	start=0;	
-		
+	Ini_Lcd();
+    Disp(1,0,14,"请输入开机密码");
+    for (i=0;i<5;i++)
+    {
+    Write_Cmd(0x88+i);
+    Write_Data(0x00);
+    Write_Data(0x00);
+    }
+    Write_Cmd(0x88+i_cide);
+    Write_Data(0x00);
+    Write_Data(0x02);
+    while (1)
+    {
+        bit flag_cide;
+        flag_cide=0;
+        key_cide=00;
+        while (1)
+        {
+            KeyIO=0xf0;
+            if((KeyIO&0xf0)!=0xf0)
+            {
+                Delay_xMs(100);
+                if ((KeyIO&0xf0)!=0xf0)
+                {
+                key_cide=scankey();
+                KeyIO=0xf0;
+                while (KeyIO!=0xf0);
+                break;
+                }
+            }
+        }
+        switch (key_cide)
+        {
+            case 11:
+            cide[i_cide]=1+0x30;
+            break;
+            case 12:
+            cide[i_cide]=2+0x30;
+            break;
+            case 13:
+            cide[i_cide]=3+0x30;
+            break;
+            case 14:
+            cide[i_cide]=4+0x30;
+            break;
+            case 21:
+            cide[i_cide]=5+0x30;
+            break;
+            case 22:
+            cide[i_cide]=6+0x30;
+            break;
+            case 23:
+            cide[i_cide]=7+0x30;
+            break;
+            case 24:
+            cide[i_cide]=8+0x30;
+            break;
+            case 31:
+            cide[i_cide]=9+0x30;
+            break;
+            default:
+            if (i_cide)
+            {
+            if (i_cide<4||cide[4]==0x30)
+            {
+            i_cide--;
+            cide[i_cide]=0+0x30;
+            }
+            else
+            cide[i_cide]=0+0x30;
+            }
+            break;
+        }
+        if (i_cide<4&&key_cide<32)
+        i_cide++;  
+        for (i=0;i<5;i++)
+        {
+            if (cide[i]-0x30)
+            Disp(2,i,1,cide+i);
+            else
+            Disp(2,i,2," ");
+        }
+        for (i=0;i<5;i++)
+        {
+        Write_Cmd(0x88+i);
+        Write_Data(0x00);
+        Write_Data(0x00);
+        }
+        Write_Cmd(0x88+i_cide);
+        Write_Data(0x00);
+        Write_Data(0x02);
+        if (i_cide==4&&key_cide<32)
+        {
+            flag_cide=1;
+            for (i=0;i<5;i++)
+            if (cide[i]!=cide_check[i])
+            {
+            flag_cide=0;
+            break;
+            }
+        }
+        if (flag_cide)
+        break;
+    }
+
+	
 	while(1)
 	{
 		key_1=00;
@@ -384,6 +489,8 @@ void main()
                 while(1)
                 {
     			char flag2=1,flag=1,mm,nn,sum,check,choice;
+					check=0;
+					sum=0;
     			Ini_Lcd();	
     			Disp(1,0,8,"演奏大师");
     			Disp(2,0,8,"1:小星星");
@@ -420,7 +527,7 @@ void main()
     					  break;
     					default: break;
     				}
-    			sum=0;
+    			//sum=0;
     			if(flag2==0){
     				Ini_Lcd();
     			for(i=1;;i++)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               {
